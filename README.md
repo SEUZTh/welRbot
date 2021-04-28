@@ -1,4 +1,5 @@
 # How to configure the environment in your computer
+- After cloning, rename the folder as ```welRobot_ws```.
 - Build and set environment variables: 
 	```bash
 	cd ~/welRobot_ws/
@@ -14,7 +15,7 @@
 - Configure Turtlebot3's model:
 	```bash
 	mkdir -p ~/.gazebo/models/
-	cp -r ~/welRobot_ws/src/turtlebot3_simulations/turtlebot3_gazebo/models/turtlebot3_burger ~/.welRobot_ws/models/
+	cp -r ~/welRobot_ws/src/turtlebot3_simulations/turtlebot3_gazebo/models/turtlebot3_burger ~/.gazebo/models/
 	```
 - Add environment variables:
 	```bash
