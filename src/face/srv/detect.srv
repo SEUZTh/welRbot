@@ -1,0 +1,6 @@
+string imgPath
+----
+uint8 faceNum
+int32[5] face1 #分别为 左上角所在点的行和列 宽 高 年龄
+int32[5] face2
+int32[5] face3

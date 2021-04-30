@@ -1,0 +1,4 @@
+string srcPath
+string dstPath
+----
+float64 confidence
