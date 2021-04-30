@@ -36,34 +36,34 @@
 
 #include "turtlebot3_fake.h"
 
-#define WHEEL_RADIUS                    0.033     // meter
+#define WHEEL_RADIUS 0.033 // meter
 
-#define LEFT                            0
-#define RIGHT                           1
+#define LEFT 0
+#define RIGHT 1
 
-#define MAX_LINEAR_VELOCITY             0.22   // m/s
-#define MAX_ANGULAR_VELOCITY            2.84   // rad/s
-#define VELOCITY_STEP                   0.01   // m/s
-#define VELOCITY_LINEAR_X               0.01   // m/s
-#define VELOCITY_ANGULAR_Z              0.1    // rad/s
-#define SCALE_VELOCITY_LINEAR_X         1
-#define SCALE_VELOCITY_ANGULAR_Z        1
+#define MAX_LINEAR_VELOCITY 0.22  // m/s
+#define MAX_ANGULAR_VELOCITY 2.84 // rad/s
+#define VELOCITY_STEP 0.01        // m/s
+#define VELOCITY_LINEAR_X 0.01    // m/s
+#define VELOCITY_ANGULAR_Z 0.1    // rad/s
+#define SCALE_VELOCITY_LINEAR_X 1
+#define SCALE_VELOCITY_ANGULAR_Z 1
 
-#define DEG2RAD(x)                      (x * 0.01745329252)  // *PI/180
-#define RAD2DEG(x)                      (x * 57.2957795131)  // *180/PI
+#define DEG2RAD(x) (x * 0.01745329252) // *PI/180
+#define RAD2DEG(x) (x * 57.2957795131) // *180/PI
 
-#define TORQUE_ENABLE                   1       // Value for enabling the torque of motor
-#define TORQUE_DISABLE                  0       // Value for disabling the torque of motor
+#define TORQUE_ENABLE 1  // Value for enabling the torque of motor
+#define TORQUE_DISABLE 0 // Value for disabling the torque of motor
 
 class Turtlebot3Fake
 {
- public:
+public:
   Turtlebot3Fake();
   ~Turtlebot3Fake();
   bool init();
   bool update();
 
- private:
+private:
   // ROS NodeHandle
   ros::NodeHandle nh_;
   ros::NodeHandle nh_priv_;
@@ -91,8 +91,8 @@ class Turtlebot3Fake
   double goal_angular_velocity_;
   double cmd_vel_timeout_;
 
-  float  odom_pose_[3];
-  float  odom_vel_[3];
+  float odom_pose_[3];
+  float odom_vel_[3];
   double pose_cov_[36];
 
   std::string joint_states_name_[2];
@@ -108,7 +108,7 @@ class Turtlebot3Fake
   void commandVelocityCallback(const geometry_msgs::TwistConstPtr cmd_vel_msg);
   bool updateOdometry(ros::Duration diff_time);
   void updateJoint(void);
-  void updateTF(geometry_msgs::TransformStamped& odom_tf);
+  void updateTF(geometry_msgs::TransformStamped &odom_tf);
 };
 
 #endif // TURTLEBOT3_FAKE_H_
