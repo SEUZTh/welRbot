@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """a simple facepp sdk
 usage:
     api = API(key, secret)
@@ -15,10 +14,12 @@ import mimetypes
 import time
 from collections import Iterable
 from PythonSDK.structures import ObjectDict
-from PythonSDK.compat import (basestring, str, numeric_types, enc, choose_boundary,
-                              Request, urlopen, HTTPError, URLError)
+from PythonSDK.compat import (basestring, str, numeric_types, enc,
+                              choose_boundary, Request, urlopen, HTTPError,
+                              URLError)
 
 import ssl
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 __all__ = ['File', 'APIError', 'API']
@@ -31,7 +32,6 @@ API_SECRET = "qhoH-aiAUtMIPaEroEmZM83fxAQ1Qzvp"
 
 
 class File(object):
-
     """an object representing a local file"""
     path = None
     content = None
@@ -62,7 +62,6 @@ class APIError(Exception):
 
     body = None
     """server response body; or detailed error information"""
-
     def __init__(self, code, url, body):
         self.code = code
         self.url = url
@@ -93,8 +92,9 @@ class API(object):
             or socket error
         :param retry_delay: time to sleep before retrying
         """
-        if len(API_KEY)==0 or len(API_SECRET)==0:
-            print('\n'+'请在'+os.path.realpath(__file__)+'文件中填写正确的API_KEY和API_SECRET'+'\n')
+        if len(API_KEY) == 0 or len(API_SECRET) == 0:
+            print('\n' + '请在' + os.path.realpath(__file__) +
+                  '文件中填写正确的API_KEY和API_SECRET' + '\n')
             exit(1)
 
         self.key = API_KEY
@@ -125,7 +125,9 @@ class API(object):
 def _setup_apiobj(self, api, prefix, path):
     if self is not api:
         self._api = api
-        self._urlbase = '{server}/{prefix}/{path}'.format(server=api.server, prefix=prefix, path='/'.join(path))
+        self._urlbase = '{server}/{prefix}/{path}'.format(server=api.server,
+                                                          prefix=prefix,
+                                                          path='/'.join(path))
 
     lvl = len(path)
     done = set()
@@ -145,7 +147,7 @@ class _APIProxy(object):
 
     _urlbase = None
 
-    def __init__(self, api,  prefix, path):
+    def __init__(self, api, prefix, path):
         _setup_apiobj(self, api, prefix, path)
 
     def __call__(self, *args, **kargs):
@@ -183,9 +185,10 @@ class _APIProxy(object):
 
         if self._api.decode_result:
             try:
-                ret = json.loads(ret, object_hook=ObjectDict)
+                ret = json.loads(ret.decode(), object_hook=ObjectDict)
             except:
-                raise APIError(-1, url, 'json decode error, value={0!r}'.format(ret))
+                raise APIError(-1, url,
+                               'json decode error, value={0!r}'.format(ret))
         return ret
 
     def _mkarg(self, kargs):
@@ -209,9 +212,7 @@ class _APIProxy(object):
 
 
 class _MultiPartForm(object):
-
     """Accumulate the data to be used when posting a form."""
-
     def __init__(self):
         self.form_fields = []
         self.files = []
@@ -227,7 +228,8 @@ class _MultiPartForm(object):
     def add_file(self, fieldname, filename, content, mimetype=None):
         """Add a file to be uploaded."""
         if mimetype is None:
-            mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            mimetype = mimetypes.guess_type(
+                filename)[0] or 'application/octet-stream'
         self.files.append((fieldname, filename, mimetype, content))
 
     @property
@@ -241,22 +243,20 @@ class _MultiPartForm(object):
         part_boundary = "--" + self.boundary
 
         # Add the form fields
-        parts.extend(
-            [part_boundary,
-             'Content-Disposition: form-data; name="{}"'.format(name), '', value]
-            for name, value in self.form_fields
-        )
+        parts.extend([
+            part_boundary, 'Content-Disposition: form-data; name="{}"'.format(
+                name), '', value
+        ] for name, value in self.form_fields)
 
         # Add the files to upload
-        parts.extend(
-            [part_boundary,
-             'Content-Disposition: form-data; name="{}"; filename="{}"'.format(field_name, filename),
-             'Content-Type: {}'.format(content_type),
-             '',
-             body,
-             ]
-            for field_name, filename, content_type, body in self.files
-        )
+        parts.extend([
+            part_boundary,
+            'Content-Disposition: form-data; name="{}"; filename="{}"'.format(
+                field_name, filename),
+            'Content-Type: {}'.format(content_type),
+            '',
+            body,
+        ] for field_name, filename, content_type, body in self.files)
 
         # Flatten the list and add closing boundary marker,
         # then return CR+LF separated data
@@ -271,49 +271,42 @@ def _print_debug(msg):
         sys.stderr.write(str(msg) + '\n')
 
 
-_APIS = [
-    {
-        'prefix': 'facepp/v3',
-        'paths': [
-            '/detect',
-            '/compare',
-            '/search',
-            '/faceset/create',
-            '/faceset/addface',
-            '/faceset/removeface',
-            '/faceset/update',
-            '/faceset/getdetail',
-            '/faceset/delete',
-            '/faceset/getfacesets',
-            '/face/analyze',
-            '/face/getdetail',
-            '/face/setuserid',
-        ],
-    },
-    {
-        'prefix': 'humanbodypp/v1',
-        'paths': [
-            '/detect',
-            '/segment',
-        ]
-    },
-    {
-        'prefix': 'cardpp/v1',
-        'paths': [
-            '/ocridcard',
-            '/ocrdriverlicense',
-            '/ocrvehiclelicense',
-            '/ocrbankcard',
-        ]
-    },
-    {
-        'prefix': 'imagepp/v1',
-        'paths': [
-            '/licenseplate',
-            '/recognizetext',
-            '/mergeface'
-        ]
-    }
-]
+_APIS = [{
+    'prefix':
+    'facepp/v3',
+    'paths': [
+        '/detect',
+        '/compare',
+        '/search',
+        '/faceset/create',
+        '/faceset/addface',
+        '/faceset/removeface',
+        '/faceset/update',
+        '/faceset/getdetail',
+        '/faceset/delete',
+        '/faceset/getfacesets',
+        '/face/analyze',
+        '/face/getdetail',
+        '/face/setuserid',
+    ],
+}, {
+    'prefix': 'humanbodypp/v1',
+    'paths': [
+        '/detect',
+        '/segment',
+    ]
+}, {
+    'prefix':
+    'cardpp/v1',
+    'paths': [
+        '/ocridcard',
+        '/ocrdriverlicense',
+        '/ocrvehiclelicense',
+        '/ocrbankcard',
+    ]
+}, {
+    'prefix': 'imagepp/v1',
+    'paths': ['/licenseplate', '/recognizetext', '/mergeface']
+}]
 
 _APIS = [(i['prefix'], [p.split('/')[1:] for p in i['paths']]) for i in _APIS]

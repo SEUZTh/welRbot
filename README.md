@@ -31,4 +31,10 @@
 	roslaunch turtlebot3_gazebo turtlebot3_empty_world.launch
 	```
 ## Test
-
+### Face detection and face comperation
+```bash
+roscore
+rosrun face facepp.py
+rosrun smach_state face_detect_client.py 'welRobot_ws/src/face/face_data/face1.jpg'
+rosrun smach_state face_compare_client.py 'welRobot_ws/src/face/face_data/face1.jpg' 'welRobot_ws/src/face/face_data/face1.jpg'
+```

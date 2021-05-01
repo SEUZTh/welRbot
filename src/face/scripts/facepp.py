@@ -7,6 +7,7 @@ from PythonSDK.facepp import API, File
 import PythonSDK.ImagePro
 import rospy
 from face.srv import detect, detectResponse, search, searchResponse, compare, compareResponse
+import sys
 
 
 # 此方法专用来打印api返回的信息
@@ -62,7 +63,7 @@ def AddFace(faceList):
 
 if __name__ == '__main__':
     api = API()  # 初始化API
-    print(__version__)
+    #print(sys.version)
     # api.faceset.delete(outer_id='faceSet', check_empty=0)#删除faceSet
     # ret = api.faceset.create(outer_id='faceSet')#创建一个新的faceSet
     rospy.init_node('face')  # ROS节点初始化

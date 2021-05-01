@@ -35,6 +35,6 @@ if __name__ == '__main__':
 
     detect_result = face_detect_client(imgPath)
 
-    print("faceNum = %s, face1 = %s, face2 = %s, face3 = %s" %
+    print("faceNum = %s,\nface1 = %s,\nface2 = %s,\nface3 = %s\n" %
           (detect_result.faceNum, detect_result.face1, detect_result.face2,
            detect_result.face3))

@@ -1,0 +1,54 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/zth/welRobot_ws/devel/include/**",
+        "/home/zth/welcomeRobot_ws/devel/include/**",
+        "/home/zth/catkin_ws/devel/include/**",
+        "/home/zth/work_ws/devel/include/**",
+        "/home/zth/tutorial_ws/devel/include/**",
+        "/opt/ros/kinetic/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/amcl/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/base_local_planner/include/**",
+        "/home/zth/catkin_ws/src/big_work/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/carrot_planner/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/clear_costmap_recovery/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/costmap_2d/include/**",
+        "/home/zth/work_ws/src/turtlebot/depthimage_to_laserscan/include/**",
+        "/home/zth/work_ws/src/turtlebot/driver_common/driver_base/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/dwa_local_planner/include/**",
+        "/home/zth/work_ws/src/experiment1/include/**",
+        "/home/zth/work_ws/src/experiment2/include/**",
+        "/home/zth/work_ws/src/experiment3/include/**",
+        "/home/zth/welRobot_ws/src/face/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/global_planner/include/**",
+        "/home/zth/work_ws/src/turtlebot/hokuyo_node/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/map_server/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/move_base/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/move_slow_and_clear/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/nav_core/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/navfn/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/robot_pose_ekf/include/**",
+        "/home/zth/welcomeRobot_ws/src/robot_room/include/**",
+        "/home/zth/catkin_ws/src/robot_voice/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/rotate_recovery/include/**",
+        "/home/zth/catkin_ws/src/test_pkg/include/**",
+        "/home/zth/work_ws/src/turtlebot/driver_common/timestamp_tools/include/**",
+        "/home/zth/catkin_ws/src/topic_demo/include/**",
+        "/home/zth/welRobot_ws/src/turtlebot3_simulations/turtlebot3_fake/include/**",
+        "/home/zth/welRobot_ws/src/turtlebot3_simulations/turtlebot3_gazebo/include/**",
+        "/home/zth/welRobot_ws/src/turtlebot3/turtlebot3_slam/include/**",
+        "/home/zth/work_ws/src/turtlebot/turtlebot_apps/turtlebot_actions/include/**",
+        "/home/zth/work_ws/src/turtlebot/navigation/voxel_grid/include/**",
+        "/home/zth/catkin_ws/src/xfei_asr/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}
