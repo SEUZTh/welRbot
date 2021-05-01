@@ -5,6 +5,10 @@ import rospy
 import smach
 import smach_ros
 
+from pkg_faceRecognition.face_detect_client1 import detectClient
+from pkg_faceRecognition.face_compare_client import face_compare_client
+from pkg_move.rotate import rotate
+
 
 # define state 1: navegate to the room where guests are.
 class navigate2guests(smach.State):
@@ -13,6 +17,8 @@ class navigate2guests(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state navigate2guests...')
+        # rotate to gather particles
+        rotate(10)
         return 'outcome1'
 
 
@@ -23,6 +29,14 @@ class face2aguest(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state face2aguest...')
+
+        # Request face detection service
+        imgPath = '/home/zth/welRobot_ws/src/face/face_data/face1.jpg'
+        dc = detectClient()
+        dc.face_detect_client(imgPath)
+        print("faceNum = %s,\nface1 = %s,\nface2 = %s,\nface3 = %s\n" %
+              (dc.faceNum, dc.face1, dc.face2, dc.face3))
+
         return 'outcome2'
 
 

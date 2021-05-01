@@ -1,0 +1,21 @@
+<launch>
+    <!-- launch Gazebo world -->
+    <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch"/>
+
+    <!-- launch face recognition module -->
+    <node pkg="face" type="facepp.py" name="facepp" output="screen"/>
+    <!-- launch speech recognition module -->
+
+    <!-- launch navigation module, can modify the default map in the launch file-->
+    <include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch"/>
+
+    <!-- launch smach state machine -->
+    <node pkg="smach_state" type="smach_state.py" name="smach_state" output="screen"/>
+    
+    <!-- <node pkg="smach_state" type="face_detect_client.py" name="face_detect_client" 
+        args="'welRobot_ws/src/face/face_data/face1.jpg'">
+    </node>
+    <node pkg="smach_state" type="face_compare_client.py" name="face_compare_client" 
+        args="'welRobot_ws/src/face/face_data/face1.jpg' 'welRobot_ws/src/face/face_data/face1.jpg'">
+    </node> -->
+</launch>
