@@ -9,6 +9,8 @@ from pkg_faceRecognition.face_detect_client1 import detectClient
 from pkg_faceRecognition.face_compare_client import face_compare_client
 from pkg_move.rotate import rotate
 from pkg_navigation.navigation_client import navigate2destination
+from pkg_voice.voiceRecognition_psub import voiceRecognition
+from pkg_voice.voiceSynthesis_pub import voiceSynthesis_pub
 
 
 # define state 1: navegate to the room where guests are.
@@ -55,6 +57,14 @@ class ask_guest(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state ask_guest...')
+        # ask name
+        words = "Hi, what's your name please?"
+        voiceSynthesis_pub(words)
+        # listen to a guest
+        vrp = voiceRecognition()
+        vrp.voice_recognition_pub()
+        vrp.voice_recognition_sub()
+
         isUnderstand = True  # 是否听懂
         if isUnderstand:
             isUnderstand = False
@@ -131,7 +141,7 @@ def main():
     # The position pf guests and faced to them.
     guestPosition = [(1.522, 0.444, 0.0), (0.0, 0.0, -0.519, 0.85)]
     # The position of sofa
-    sofaPos = [(-2.0432, -0.439, 0.0), (0.0, 0.0, -0.559, 0.82902)]
+    sofaPos = [(3.995, -4.658, 0.0), (0.0, 0.0, 0.990, 0.136)]
 
     rospy.init_node('smach_state_machine')
 

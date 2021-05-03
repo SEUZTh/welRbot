@@ -5,8 +5,10 @@
 
     <!-- launch face recognition module -->
     <node pkg="face" type="facepp.py" name="facepp" output="screen"/>
-    <!-- launch speech recognition module -->
-
+    <!-- launch voice recognition Kedaxunfei API module -->
+    <node pkg="robot_voice" type="iat_publish_becalled" name="iat_publish_becalled" output="screen"/>
+    <!-- launch voice synthesis Kedaxunfei API module -->
+    <node pkg="xfei_asr" type="tts_subscribe_speak" name="tts_subscribe_speak" output="screen"/>
     <!-- launch navigation module, can modify the default map in the launch file-->
     <include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch"/>
 

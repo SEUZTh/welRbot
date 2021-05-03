@@ -39,3 +39,15 @@ rosrun face facepp.py
 rosrun smach_state face_detect_client.py 'welRobot_ws/src/face/face_data/face1.jpg'
 rosrun smach_state face_compare_client.py 'welRobot_ws/src/face/face_data/face1.jpg' 'welRobot_ws/src/face/face_data/face1.jpg'
 ```
+### Voice recognition
+```bash
+roscore
+rosrun robot_voice iat_publish_becalled
+rosrun smach_state voiceRecognition_psub.py
+```
+### Voice
+```bash
+roscore
+rosrun xfei_asr tts_subscribe_speak
+rosrun smach_state voiceSynthesis_pub.py
+```
