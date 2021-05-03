@@ -24,7 +24,8 @@
 	```
 	Add this code to ```~/.bashrc```:
 	```bash
-	export TURTLEBOT3_MODEL=burger
+	# export TURTLEBOT3_MODEL=burger # without camera
+	export TURTLEBOT3_MODEL=waffle
 	```
 - Test by launch a world:
 	```bash

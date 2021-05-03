@@ -8,17 +8,25 @@ import smach_ros
 from pkg_faceRecognition.face_detect_client1 import detectClient
 from pkg_faceRecognition.face_compare_client import face_compare_client
 from pkg_move.rotate import rotate
+from pkg_navigation.navigation_client import navigate2destination
 
 
 # define state 1: navegate to the room where guests are.
 class navigate2guests(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['outcome1'])
+        smach.State.__init__(self,
+                             outcomes=['outcome1'],
+                             input_keys=['guestPos_counter_in'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state navigate2guests...')
         # rotate to gather particles
-        rotate(10)
+        rotate(10)  # 10 * pi
+
+        # To find guests
+        n2g = navigate2destination()
+        n2g.navigation_client(userdata.guestPos_counter_in)
+
         return 'outcome1'
 
 
@@ -31,7 +39,7 @@ class face2aguest(smach.State):
         rospy.loginfo('Executing state face2aguest...')
 
         # Request face detection service
-        imgPath = '/home/zth/welRobot_ws/src/face/face_data/face1.jpg'
+        imgPath = '/home/zth/welRobot_ws/src/smach_state/script/pkg_camera/guest_photo/guests.jpg'
         dc = detectClient()
         dc.face_detect_client(imgPath)
         print("faceNum = %s,\nface1 = %s,\nface2 = %s,\nface3 = %s\n" %
@@ -105,25 +113,38 @@ class introduce_guest(smach.State):
 # define state 8: guide the oldest to the sofa
 class guide2sofa(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['outcome8'])
+        smach.State.__init__(self,
+                             outcomes=['outcome8'],
+                             input_keys=['sofaPos_counter_in'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state guide2sofa...')
+        # To find guests
+        n2g = navigate2destination()
+        n2g.navigation_client(userdata.sofaPos_counter_in)
+
         return 'outcome8'
 
 
 def main():
+    # Params init
+    # The position pf guests and faced to them.
+    guestPosition = [(1.522, 0.444, 0.0), (0.0, 0.0, -0.519, 0.85)]
+    # The position of sofa
+    sofaPos = [(-2.0432, -0.439, 0.0), (0.0, 0.0, -0.559, 0.82902)]
 
     rospy.init_node('smach_state_machine')
 
     # Create the sub SMACH state machine
     sm_top = smach.StateMachine(outcomes=['outcomeZ'])
-
+    sm_top.userdata.guestPos = guestPosition
+    sm_top.userdata.sofaPos = sofaPos
     # Open the container
     with sm_top:
         smach.StateMachine.add('NAVIGATE2GUESTS',
                                navigate2guests(),
-                               transitions={'outcome1': 'RECOGNIZE_PEOPLE'})
+                               transitions={'outcome1': 'RECOGNIZE_PEOPLE'},
+                               remapping={'guestPos_counter_in': 'guestPos'})
 
         # Create the recognizePeople SMACH state machine
         sm_recognizePeople = smach.StateMachine(outcomes=['outcomeX'])
@@ -170,7 +191,8 @@ def main():
 
         smach.StateMachine.add('GUIDE_TO_SOFA',
                                guide2sofa(),
-                               transitions={'outcome8': 'outcomeZ'})
+                               transitions={'outcome8': 'outcomeZ'},
+                               remapping={'sofaPos_counter_in': 'sofaPos'})
     # Create and start the introspection server
     sis = smach_ros.IntrospectionServer('smach_state_machine', sm_top,
                                         '/SM_ROOT')

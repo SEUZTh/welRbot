@@ -1,5 +1,6 @@
 <launch>
     <!-- launch Gazebo world -->
+    <!-- <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch"/> -->
     <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch"/>
 
     <!-- launch face recognition module -->

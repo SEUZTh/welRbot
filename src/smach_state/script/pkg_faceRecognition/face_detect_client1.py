@@ -6,7 +6,7 @@ import rospy
 from face.srv import detect
 
 
-class detectClient:
+class detectClient():
     def __init__(self, faceNum=0, face1=0, face2=0, face3=0):
         self.faceNum = faceNum
         self.face1 = face1
