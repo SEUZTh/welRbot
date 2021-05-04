@@ -31,6 +31,7 @@ class navigate2destination():
             self.navigationClient.wait_for_server()
             self.navigationClient.send_goal(self.goal_pose)
             self.navigationClient.wait_for_result()
+            print("I arrived at %s" % str(pose))
         except rospy.ServiceException as e:
             print("Navigation service call failed: %s" % e)
 

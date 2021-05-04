@@ -28,25 +28,25 @@ class navigate2guests(smach.State):
         rospy.loginfo('Executing state navigate2guests...')
         # rotate to gather particles
         rospy.loginfo('Rotate 2 circles...')
-        rotate(4)  # 4 * pi
+        rotate(6)  # 4 * pi
 
         # To find guests and be faced to them
         rospy.loginfo('To find guests...')
-        n2g = navigate2destination()
-        n2g.navigation_client(userdata.guestPos_in)
+        # n2g = navigate2destination()
+        # n2g.navigation_client(userdata.guestPos_in)
 
         # Take a photo of them
         rospy.loginfo('Take a photo of them...')
-        tp = takePhoto('AllofThem')
-        tp.take_a_photo()
+        # tp = takePhoto('AllofThem')
+        # tp.take_a_photo()
 
         # Request face detection service
         rospy.loginfo('Request face detection service...')
-        imgPath = '/home/zth/welRobot_ws/src/smach_state/script/pkg_camera/guest_photo/AllofThem.jpg'
-        dc = detectClient()
-        dc.face_detect_client(imgPath)
-        print("faceNum = %s,\nface1 = %s,\nface2 = %s,\nface3 = %s\n" %
-              (dc.faceNum, dc.face1, dc.face2, dc.face3))
+        # imgPath = '/home/zth/welRobot_ws/src/smach_state/script/pkg_camera/guest_photo/AllofThem.jpg'
+        # dc = detectClient()
+        # dc.face_detect_client(imgPath)
+        # print("faceNum = %s,\nface1 = %s,\nface2 = %s,\nface3 = %s\n" %
+        #       (dc.faceNum, dc.face1, dc.face2, dc.face3))
 
         return 'outcome1'
 
@@ -64,9 +64,9 @@ class face2aguest(smach.State):
 
         # be faced to one of them
         print("be faced to %s" % userdata.guest_counter_in)
-        n2g = navigate2destination()
-        n2g.navigation_client(
-            userdata.eachGuestPos_in[userdata.guest_counter_in])
+        # n2g = navigate2destination()
+        # n2g.navigation_client(
+        #     userdata.eachGuestPos_in[userdata.guest_counter_in])
 
         return 'outcome2'
 
@@ -82,50 +82,41 @@ class ask_guest(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state ask_guest...')
         # ask name
-        words_1 = "Hi, what's your name please?"
-        voiceSynthesis_pub(words_1)
+        # words_1 = "Hi, what's your name please?"
+        # voiceSynthesis_pub(words_1)
         # listen to a guest
-        rospy.loginfo('Listening to name...')
-        vrp = voiceRecognition()
-        vrp.voice_recognition_pub()
-        vrp.voice_recognition_sub()
-        name = vrp.name
+        # rospy.loginfo('Listening to name...')
+        # vrp = voiceRecognition()
+        # vrp.voice_recognition_pub()
+        # vrp.voice_recognition_sub()
+        name = 'ZTh'
         # ask favorite drink
         words_2 = "What's your favorite drink?"
-        voiceSynthesis_pub(words_2)
+        # voiceSynthesis_pub(words_2)
         # listen to a guest
         rospy.loginfo('Listening to favorite drink...')
-        vrp = voiceRecognition()
-        vrp.voice_recognition_pub()
-        vrp.voice_recognition_sub()
-        favoriteDrink = vrp.favoriteDrink
-        if vrp.isUnderstand:
-            vrp.isUnderstand = False
-            # repeat what the guest said
-            words_3 = "Oh, I see. Your name is %s and your favorite drink is %s." % (
-                name, favoriteDrink)
-            voiceSynthesis_pub(words_3)
-            # return info
+        # vrp = voiceRecognition()
+        # vrp.voice_recognition_pub()
+        # vrp.voice_recognition_sub()
+        favoriteDrink = 'cola'
+        if True:
             temp = userdata.guest_info_in
             userdata.guest_info_out = userdata.guest_info_in
             if userdata.ask_counter_in == 0:
-                temp['name0'] = name
-                temp['drink0'] = favoriteDrink
+                temp['name0'] = 'A'
+                temp['drink0'] = 'A1'
             elif userdata.ask_counter_in == 1:
-                temp['name1'] = name
-                temp['drink1'] = favoriteDrink
+                temp['name1'] = 'B'
+                temp['drink1'] = 'B1'
             elif userdata.ask_counter_in == 2:
-                temp['name2'] = name
-                temp['drink2'] = favoriteDrink
+                temp['name2'] = 'C'
+                temp['drink2'] = 'C1'
+            else:
                 print "Error in asking!"
-
+            print temp
             userdata.guest_info_out = temp
-
             return 'outcome3'
         else:
-            words_4 = "Pardon, I can't understand what you said."
-            voiceSynthesis_pub(words_4)
-
             return 'outcome4'
 
 
@@ -150,27 +141,30 @@ class save_img_info(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state save_img_info...')
-        # Take a photo of the guest
+        temp = userdata.sii_guest_info_in
+
         if userdata.sii_counter_in == 0:
             # take photo
             tp = takePhoto(userdata.sii_guest_info_in['name0'])
             tp.take_a_photo()
             # detect age
             dc = detectClient()
-            dc.face_detect_client(tp.savePath)
+            dc.face_detect_client(
+                '/home/zth/welRobot_ws/src/face/face_data/face1.jpg')
+
             temp['age0'] = str(dc.face1).split(', ')[4].split(')')[0]
             userdata.sii_guest_info_out = temp
             # save info
-            save_info(userdata.sii_guest_info_in['name0'],
-                      userdata.sii_guest_info_in['age0'],
-                      userdata.sii_guest_info_in['drink0'],
-                      userdata.sii_guest_info_in['pos0'])
+            save_info(temp['name0'], temp['age0'], temp['drink0'],
+                      temp['pos0'])
         elif userdata.sii_counter_in == 1:
             # take photo
             tp = takePhoto(userdata.sii_guest_info_in['name1'])
+            tp.take_a_photo()
             # detect age
             dc = detectClient()
-            dc.face_detect_client(tp.savePath)
+            dc.face_detect_client(
+                '/home/zth/welRobot_ws/src/face/face_data/face1.jpg')
             temp['age1'] = str(dc.face1).split(', ')[4].split(')')[0]
             userdata.sii_guest_info_out = temp
             # save info
@@ -181,9 +175,11 @@ class save_img_info(smach.State):
         elif userdata.sii_counter_in == 2:
             # take photo
             tp = takePhoto(userdata.sii_guest_info_in['name2'])
+            tp.take_a_photo()
             # detect age
             dc = detectClient()
-            dc.face_detect_client(tp.savePath)
+            dc.face_detect_client(
+                '/home/zth/welRobot_ws/src/face/face_data/face1.jpg')
             temp['age2'] = str(dc.face1).split(', ')[4].split(')')[0]
             userdata.sii_guest_info_out = temp
             # save info
@@ -257,13 +253,7 @@ class guide2sofa(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state guide2sofa...')
-        # please follow me
-        words = "Please follow me, I will lead you to sofa."
-        pub = rospy.Publisher("xfwords", String, queue_size=1)
-        rospy.sleep(1)
-        pub.publish(words)
-        rospy.sleep(6)
-        # guide the oldest to sofa
+        # To find guests
         n2g = navigate2destination()
         n2g.navigation_client(userdata.sofaPos_in)
 

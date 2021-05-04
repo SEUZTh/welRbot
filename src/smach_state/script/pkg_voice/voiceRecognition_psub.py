@@ -8,9 +8,12 @@ from std_msgs.msg import String
 
 class voiceRecognition():
     def __init__(self):
-        rospy.init_node('voiceRecognitionpsub', anonymous=False)
         self.pub = rospy.Publisher('voiceWakeup', String, queue_size=1)
         self.rate = rospy.Rate(10)  # 1 Hz
+        self.name = ''
+        self.favoriteDrink = ''
+        self.isUnderstand = False
+        self.voice_msg = None
 
     def voice_recognition_pub(self):
         rospy.sleep(
@@ -18,28 +21,56 @@ class voiceRecognition():
         )  # There must be a sleep between rospy.Publisher() and pub.publish().
         self.pub.publish('wake up')  # wake up the voice recognition system
         self.rate.sleep()
+        print 'Listening...'
 
     def voice_recognition_sub(self):
-        self.sub1 = rospy.Subscriber('voiceWords', String,
-                                     self.judgeCallback)  #监听识别结果的消息传入回调函数
-        # rospy.spin() # keep listening
-        rospy.sleep(11)  # only listen for 11 s, because speak time is 10 s
-        print "end"
+        while self.voice_msg is None:
+            try:
+                self.voice_msg = rospy.wait_for_message('voiceWords',
+                                                        String,
+                                                        timeout=20)
+                print("%s" % self.voice_msg.data)
+            except:
+                print 'Get voice_msg timeout!'
+                pass
 
-    def voice_recognition_cancel_sub(self):
-        self.sub.unregister()
-
-    def judgeCallback(self, msg):
-        print msg.data
-        if msg.data.find('name') > -1:
+        if self.voice_msg.data.find('name') > -1:
             self.isUnderstand = True
-        elif msg.data.find('drink') > -1:
+            words = str(self.voice_msg.data)
+            self.name = words.split('is ', 2)[1]
+            print self.name
+        elif self.voice_msg.data.find('drink') > -1:
             self.isUnderstand = True
+            words = str(self.voice_msg.data)
+            self.favoriteDrink = words.split('is ', 2)[1]
+            print self.favoriteDrink
         else:
             self.isUnderstand = False
+        # self.sub1 = rospy.Subscriber('voiceWords', String,
+        #                              self.judgeCallback)  #监听识别结果的消息传入回调函数
+        # rospy.spin() # keep listening
+        # rospy.sleep(11)  # only listen for 11 s, because speak time is 10 s
+        print "end"
+
+    # def voice_recognition_cancel_sub(self):
+    #     self.sub.unregister()
+
+    # def judgeCallback(self, msg):
+    #     print msg.data
+    #     if msg.data.find('name') > -1:
+    #         self.isUnderstand = True
+    #         words = str(msg.data)
+    #         self.name = words.split('is ', 2)[1]
+    #     elif msg.data.find('drink') > -1:
+    #         self.isUnderstand = True
+    #         words = str(msg.data)
+    #         self.favoriteDrink = words.split('is ', 2)[1]
+    #     else:
+    #         self.isUnderstand = False
 
 
 if __name__ == '__main__':
+    rospy.init_node('voiceRecognitionpsub', anonymous=False)
     vrp = voiceRecognition()
     vrp.voice_recognition_pub()
     vrp.voice_recognition_sub()
