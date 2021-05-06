@@ -32,17 +32,20 @@ class voiceRecognition():
                 print("%s" % self.voice_msg.data)
             except:
                 print 'Get voice_msg timeout!'
+                self.pub.publish('wake up')
                 pass
 
         if self.voice_msg.data.find('name') > -1:
             self.isUnderstand = True
             words = str(self.voice_msg.data)
-            self.name = words.split('is ', 2)[1]
+            temp = words.split('is ', 2)[1]
+            self.name = temp.split('.', 2)[0]
             print self.name
         elif self.voice_msg.data.find('drink') > -1:
             self.isUnderstand = True
             words = str(self.voice_msg.data)
-            self.favoriteDrink = words.split('is ', 2)[1]
+            temp = words.split('is ', 2)[1]
+            self.favoriteDrink = temp.split('.', 2)[0]
             print self.favoriteDrink
         else:
             self.isUnderstand = False
@@ -50,7 +53,7 @@ class voiceRecognition():
         #                              self.judgeCallback)  #监听识别结果的消息传入回调函数
         # rospy.spin() # keep listening
         # rospy.sleep(11)  # only listen for 11 s, because speak time is 10 s
-        print "end"
+        print "Recognition end..."
 
     # def voice_recognition_cancel_sub(self):
     #     self.sub.unregister()

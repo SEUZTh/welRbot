@@ -11,7 +11,7 @@
     <node pkg="xfei_asr" type="tts_subscribe_speak" name="tts_subscribe_speak" output="screen"/>
     <!-- launch navigation module, can modify the default map in the launch file-->
     <include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch">
-        <arg name="map_file" value="$(find turtlebot3_navigation)/maps/welRobot_map.yaml" />
+        <arg name="map_file" value="$(find turtlebot3_navigation)/maps/welRobot_map1.yaml" />
     </include>
 
     <!-- launch smach state machine -->

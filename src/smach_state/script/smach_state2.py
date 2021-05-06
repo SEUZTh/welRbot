@@ -36,7 +36,7 @@ class navigate2guests(smach.State):
         rospy.loginfo('To find guests...')
         n2g = navigate2destination()
         n2g.navigation_client(userdata.guestPos_in)
-        rospy.sleep(10)
+        rospy(10)
         # Take a photo of them
         rospy.loginfo('Take a photo of them...')
         tp = takePhoto('AllofThem')
@@ -84,34 +84,34 @@ class ask_guest(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state ask_guest...')
         # ask name
-        words_1 = "Hi, what's your name please?"
-        voiceSynthesis_pub(words_1)
-        rospy.sleep(3)
+        # words_1 = "Hi, what's your name please?"
+        # voiceSynthesis_pub(words_1)
+        # rospy.sleep(3)
         # listen to a guest
-        rospy.loginfo('Listening to name...')
-        vrp = voiceRecognition()
-        vrp.voice_recognition_pub()
-        vrp.voice_recognition_sub()
-        name = vrp.name
+        # rospy.loginfo('Listening to name...')
+        # vrp = voiceRecognition()
+        # vrp.voice_recognition_pub()
+        # vrp.voice_recognition_sub()
+        name = '1'
         rospy.sleep(6)
         # ask favorite drink
-        words_2 = "What's your favorite drink?"
-        voiceSynthesis_pub(words_2)
-        rospy.sleep(3)
+        # words_2 = "What's your favorite drink?"
+        # voiceSynthesis_pub(words_2)
+        # rospy.sleep(3)
         # listen to a guest
         rospy.loginfo('Listening to favorite drink...')
-        vrp = voiceRecognition()
-        vrp.voice_recognition_pub()
-        vrp.voice_recognition_sub()
-        rospy.sleep(6)
-        favoriteDrink = vrp.favoriteDrink
-        if vrp.isUnderstand:
-            vrp.isUnderstand = False
+        # vrp = voiceRecognition()
+        # vrp.voice_recognition_pub()
+        # vrp.voice_recognition_sub()
+        # rospy.sleep(6)
+        favoriteDrink = '11'
+        if 1:
+            # vrp.isUnderstand = False
             # repeat what the guest said
-            words_3 = "Oh, I see. Your name is %s and your favorite drink is %s." % (
-                name, favoriteDrink)
-            voiceSynthesis_pub(words_3)
-            rospy.sleep(5)
+            # words_3 = "Oh, I see. Your name is %s and your favorite drink is %s." % (
+            #     name, favoriteDrink)
+            # voiceSynthesis_pub(words_3)
+            # rospy.sleep(5)
             # return info
             temp = userdata.guest_info_in
             userdata.guest_info_out = userdata.guest_info_in
@@ -165,10 +165,11 @@ class save_img_info(smach.State):
             tp.take_a_photo()
             # detect age
             dc = detectClient()
-            tp.save_face(dc.face1)
+
             if dc.face_detect_client(tp.savePath) < 1:
                 rospy.loginfo("There is no person.")
             else:
+                tp.save_face(dc.face1)
                 temp['age0'] = str(dc.face1).split(', ')[4].split(')')[0]
                 userdata.sii_guest_info_out = temp
                 # save info
@@ -187,6 +188,7 @@ class save_img_info(smach.State):
             if dc.face_detect_client(tp.savePath) < 1:
                 rospy.loginfo("There is no person.")
             else:
+                tp.save_face(dc.face1)
                 temp['age1'] = str(dc.face1).split(', ')[4].split(')')[0]
                 userdata.sii_guest_info_out = temp
                 # save info
@@ -205,6 +207,7 @@ class save_img_info(smach.State):
             if dc.face_detect_client(tp.savePath) < 1:
                 rospy.loginfo("There is no person.")
             else:
+                tp.save_face(dc.face1)
                 temp['age2'] = str(dc.face1).split(', ')[4].split(')')[0]
                 userdata.sii_guest_info_out = temp
                 # save info

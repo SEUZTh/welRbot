@@ -11,25 +11,28 @@ class takePhoto:
         self.name = guest_name
         self.savePath = '/home/zth/welRobot_ws/src/smach_state/script/pkg_camera/guest_photo/' + self.name + '.jpg'
         self.bridge = cv_bridge.CvBridge()
-        self.img = None
+        self.img = cv2.imread(
+            '/home/zth/welRobot_ws/src/smach_state/script/pkg_camera/guest_photo/pyy.png'
+        )
 
     def take_a_photo(self):
-        while self.img is None:
-            try:
-                self.img = rospy.wait_for_message('camera/rgb/image_raw',
-                                                  Image,
-                                                  timeout=10)
-            except:
-                print 'failed'
-                pass
+        # while self.img is None:
+        #     try:
+        #         self.img = rospy.wait_for_message('camera/rgb/image_raw',
+        #                                           Image,
+        #                                           timeout=10)
+        #     except:
+        #         print 'failed'
+        #         pass
         print '************ Take a photo! ************'
         # Bridge and save the photo of the guest
-        self.image = self.bridge.imgmsg_to_cv2(self.img)
-        # cv2.imshow("img", self.image)
-        # cv2.imwrite(self.savePath, self.image)
-        # print('%s\'s photo has been saved in %s.' % (self.name, self.savePath))
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
+        # self.image = self.bridge.imgmsg_to_cv2(self.img)
+        self.image = self.img
+        cv2.imshow("img", self.image)
+        cv2.imwrite(self.savePath, self.image)
+        print('%s\'s photo has been saved in %s.' % (self.name, self.savePath))
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
     def save_face(self, face_pos):
         x = face_pos[0]
@@ -46,16 +49,16 @@ class takePhoto:
         # print('%s\'s photo has been saved in %s.' % (self.name, self.savePath))
 
         img_face = self.image[x:x + w, y:y + h]
-        # cv2.imshow("img2", img_face)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
+        cv2.imshow("img2", img_face)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
         cv2.imwrite(self.savePath, img_face)
         print('%s\'s face photo has been saved in %s.' %
               (self.name, self.savePath))
 
 
 def main():
-    guest_name = 'Mike'
+    guest_name = 'xxxx'
     rospy.init_node('takePhoto')
     take_photo = takePhoto(guest_name)
     take_photo.take_a_photo()
@@ -64,7 +67,9 @@ def main():
     d.face_detect_client(
         '/home/zth/welRobot_ws/src/smach_state/script/pkg_camera/guest_photo/pyy.png'
     )
-    face_pos = ast.literal_eval(d.face1)
+
+    # face_pos = ast.literal_eval('[,,,,]')
+    face_pos = list(d.face1)
     take_photo.save_face(face_pos)
 
 

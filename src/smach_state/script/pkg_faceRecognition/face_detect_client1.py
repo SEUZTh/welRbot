@@ -24,8 +24,11 @@ class detectClient():
             self.face2 = resp1.face2
             self.face3 = resp1.face3
 
+            return self.faceNum
+
         except rospy.ServiceException as e:
             print("Detecting face service call failed: %s" % e)
+            return -1
 
 
 if __name__ == '__main__':
